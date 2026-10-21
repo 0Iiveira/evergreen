@@ -28,28 +28,62 @@
       <span class="si-label">我的收藏</span>
     </a>
   </nav>
+
+  <!-- 底部的淡墨远山（仅展开时显示） -->
+  <svg class="sidebar-mountains" viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true">
+    <path class="mnt mnt-1" d="M0,110 C60,85 120,125 180,100 C240,78 300,120 350,98 C375,88 390,96 400,92 L400,160 L0,160 Z"></path>
+    <path class="mnt mnt-2" d="M0,133 C80,112 150,148 230,125 C300,106 350,136 400,121 L400,160 L0,160 Z"></path>
+    <path class="mnt mnt-3" d="M0,150 C110,138 220,156 300,144 C350,136 380,150 400,143 L400,160 L0,160 Z"></path>
+  </svg>
+
+  <!-- 隐藏侧边栏按钮 -->
+  <button class="sidebar-hide" id="sidebarHide" type="button" aria-label="隐藏侧边栏" title="隐藏侧边栏">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6l-6 6 6 6"/><path d="M18 6l-6 6 6 6"/></svg>
+    <span class="sidebar-hide-label">隐藏</span>
+  </button>
 </aside>
+
+<!-- 侧边栏隐藏后，左边缘的恢复按钮 -->
+<button class="sidebar-reveal" id="sidebarReveal" type="button" aria-label="显示侧边栏" title="显示侧边栏" hidden>
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6l6 6-6 6"/><path d="M6 6l6 6-6 6"/></svg>
+</button>
 
 <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
 <script>
 (function () {
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
+  const seal = document.getElementById('sidebarSeal');
+  const hideBtn = document.getElementById('sidebarHide');
+  const revealBtn = document.getElementById('sidebarReveal');
   let hoverTimer;
 
-  // 悬停展开预览（离开若未完全展开则收起）
-  function hoverOpen() { sidebar.classList.add('hover-open'); }
+  function isHidden() { return document.body.classList.contains('sidebar-hidden'); }
+  function hoverOpen() { if (isHidden()) return; sidebar.classList.add('hover-open'); }
   function collapse() { sidebar.classList.remove('hover-open'); }
-  function fullOpen() { sidebar.classList.add('full-open'); backdrop.hidden = false; seal.setAttribute('aria-expanded', 'true'); }
+  function fullOpen() { if (isHidden()) return; sidebar.classList.add('full-open'); backdrop.hidden = false; seal.setAttribute('aria-expanded', 'true'); }
   function fullClose() { sidebar.classList.remove('full-open'); backdrop.hidden = true; seal.setAttribute('aria-expanded', 'false'); }
 
   sidebar.addEventListener('mouseenter', function () { clearTimeout(hoverTimer); hoverOpen(); });
   sidebar.addEventListener('mouseleave', function () { hoverTimer = setTimeout(collapse, 200); });
 
   // 点击红章 → 完全展开；再点 → 收回
-  const seal = document.getElementById('sidebarSeal');
   seal.addEventListener('click', function () {
     sidebar.classList.contains('full-open') ? fullClose() : fullOpen();
+  });
+
+  // 隐藏侧边栏
+  hideBtn.addEventListener('click', function () {
+    sidebar.classList.remove('full-open', 'hover-open');
+    collapse();
+    document.body.classList.add('sidebar-hidden');
+    backdrop.hidden = true;
+    revealBtn.hidden = false;
+  });
+  // 恢复
+  revealBtn.addEventListener('click', function () {
+    document.body.classList.remove('sidebar-hidden');
+    revealBtn.hidden = true;
   });
 
   backdrop.addEventListener('click', fullClose);
