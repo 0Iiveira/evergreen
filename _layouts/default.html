@@ -7,18 +7,22 @@
   <meta name="theme-color" content="{{ site.theme-color }}">
   <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+  {% include theme-init.html %}
 </head>
 <body>
 
 <header class="masthead">
   <div class="wrap" style="display:flex;align-items:baseline;justify-content:space-between;width:100%">
     <span class="brand"><a href="{{ '/' | relative_url }}" style="text-decoration:none">{{ site.title }}</a></span>
-    {% if page.layout == 'post' %}
-    <span class="body-toggle" role="group" aria-label="正文浏览方式">
-      <button class="vt-btn" data-body-view="waterfall" type="button">瀑布流</button>
-      <button class="vt-btn" data-body-view="paged" type="button">翻页</button>
+    <span class="mast-right">
+      {% if page.layout == 'post' %}
+      <span class="body-toggle" role="group" aria-label="正文浏览方式">
+        <button class="vt-btn" data-body-view="waterfall" type="button">瀑布流</button>
+        <button class="vt-btn" data-body-view="paged" type="button">翻页</button>
+      </span>
+      {% endif %}
+      {% include theme-toggle.html %}
     </span>
-    {% endif %}
   </div>
 </header>
 

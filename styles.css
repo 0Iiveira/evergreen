@@ -11,6 +11,18 @@
   --serif-cn:"Songti SC","STSong","SimSun",serif;
 }
 
+/* ---------- 黑夜模式变量 ---------- */
+html[data-theme="dark"]{
+  --paper:#1B1E1A;        /* 深墨绿底 */
+  --paper-raise:#252A23;  /* 深一档，作印章/侧栏底 */
+  --ink:#E8E4D6;          /* 浅纸色字 */
+  --ink-soft:#A9A797;     /* 浅灰字 */
+  --evergreen:#7FB79A;    /* 亮长青绿（深底上可读） */
+  --evergreen-deep:#5E977C;
+  --vermilion:#D4715C;    /* 亮朱砂 */
+  --line:#3A3F37;         /* 深色细线 */
+}
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
@@ -40,6 +52,19 @@ a{color:inherit}
   font-size:1.1rem;letter-spacing:.03em;color:var(--ink-soft);
 }
 .mast-loc{font-size:.95rem;color:var(--ink-soft)}
+.mast-right{display:flex;align-items:center;gap:.8rem}
+.theme-toggle{
+  width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--line);border-radius:50%;
+  color:var(--ink-soft);cursor:pointer;padding:0;
+  transition:color .2s ease,border-color .2s ease;
+}
+.theme-toggle:hover{color:var(--evergreen);border-color:var(--evergreen)}
+.theme-toggle .icon-moon{display:none}
+html[data-theme="dark"] .theme-toggle .icon-sun{display:none}
+html[data-theme="dark"] .theme-toggle .icon-moon{display:inline}
+/* 封面页右上角定位 */
+.cover .theme-toggle{position:absolute;top:1.5rem;right:1.5rem;z-index:5}
 .nav{display:flex;gap:1.7rem;font-size:.95rem;flex-wrap:wrap}
 .nav a{
   text-decoration:none;color:var(--ink-soft);

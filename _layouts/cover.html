@@ -7,12 +7,14 @@
   <meta name="theme-color" content="{{ site.theme-color }}">
   <title>{{ site.title }}</title>
   <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+  {% include theme-init.html %}
 </head>
 <body>
 
 <!-- 大封面：点「进入」直接进书斋 -->
 <div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="{{ site.title }}">
   <div class="seal cover-seal" aria-hidden="true"><span>长</span><span>青</span></div>
+  {% include theme-toggle.html %}
   <div class="cover-inner">
     <h1 class="cover-title">{{ site.title }}</h1>
     <p class="cover-poem">君立青山长青木，叶栖云畔长情枝。</p>
