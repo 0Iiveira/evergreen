@@ -55,20 +55,13 @@
   const seal = document.getElementById('sidebarSeal');
   const hideBtn = document.getElementById('sidebarHide');
   const revealBtn = document.getElementById('sidebarReveal');
-  let hoverTimer;
 
   function isHidden() { return document.body.classList.contains('sidebar-hidden'); }
-  function hoverOpen() { if (isHidden()) return; sidebar.classList.add('hover-open'); }
   function collapse() { sidebar.classList.remove('hover-open'); }
   function fullOpen() { if (isHidden()) return; sidebar.classList.add('full-open'); backdrop.hidden = false; seal.setAttribute('aria-expanded', 'true'); }
   function fullClose() { sidebar.classList.remove('full-open'); backdrop.hidden = true; seal.setAttribute('aria-expanded', 'false'); }
 
-  // 仅在有悬停能力的设备（电脑）启用悬停展开；触摸屏不启用，避免点击按钮被模拟悬停误展开
-  var canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (canHover) {
-    sidebar.addEventListener('mouseenter', function () { clearTimeout(hoverTimer); hoverOpen(); });
-    sidebar.addEventListener('mouseleave', function () { hoverTimer = setTimeout(collapse, 200); });
-  }
+  // 电脑端也只用点击展开/收起（取消悬停展开，避免鼠标移开就收起、无法操作）
 
   // 点击红章 → 完全展开；再点 → 收回
   seal.addEventListener('click', function () {
