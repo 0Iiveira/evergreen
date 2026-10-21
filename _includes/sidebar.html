@@ -1,0 +1,56 @@
+<!-- 全局侧边栏：单一元素，收起=窄图标条，展开(悬停/点击)=宽面板；顶部长青红章触发 -->
+<aside class="sidebar" id="sidebar" aria-label="导航">
+  <button class="sidebar-seal" id="sidebarSeal" aria-label="展开或收起导航" aria-expanded="false">
+    <span class="seal-mini" aria-hidden="true"><span>长</span><span>青</span></span>
+    <span class="sidebar-seal-name">{{ site.title }}</span>
+  </button>
+  <nav class="sidebar-nav">
+    <a class="sidebar-item" href="{{ '/essays.html' | relative_url }}">
+      <span class="si-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13.5"/><path d="M4 19.5h16"/><path d="M8 8h8M8 12h6"/></svg></span>
+      <span class="si-label">书斋</span>
+    </a>
+    <a class="sidebar-item" href="{{ '/reading.html' | relative_url }}">
+      <span class="si-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13.5"/><path d="M4 19.5h16"/><path d="M8 8h8"/></svg></span>
+      <span class="si-label">藏经阁</span>
+    </a>
+    <a class="sidebar-item" href="{{ '/about.html' | relative_url }}">
+      <span class="si-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></span>
+      <span class="si-label">广场</span>
+    </a>
+    <a class="sidebar-item" href="{{ '/changelog.html' | relative_url }}">
+      <span class="si-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <span class="si-label">密阁</span>
+    </a>
+    <a class="sidebar-item" href="{{ '/favorites.html' | relative_url }}">
+      <span class="si-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9z"/></svg></span>
+      <span class="si-label">我的收藏</span>
+    </a>
+  </nav>
+</aside>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+<script>
+(function () {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  let hoverTimer;
+
+  // 悬停展开预览（离开若未完全展开则收起）
+  function hoverOpen() { sidebar.classList.add('hover-open'); }
+  function collapse() { sidebar.classList.remove('hover-open'); }
+  function fullOpen() { sidebar.classList.add('full-open'); backdrop.hidden = false; seal.setAttribute('aria-expanded', 'true'); }
+  function fullClose() { sidebar.classList.remove('full-open'); backdrop.hidden = true; seal.setAttribute('aria-expanded', 'false'); }
+
+  sidebar.addEventListener('mouseenter', function () { clearTimeout(hoverTimer); hoverOpen(); });
+  sidebar.addEventListener('mouseleave', function () { hoverTimer = setTimeout(collapse, 200); });
+
+  // 点击红章 → 完全展开；再点 → 收回
+  const seal = document.getElementById('sidebarSeal');
+  seal.addEventListener('click', function () {
+    sidebar.classList.contains('full-open') ? fullClose() : fullOpen();
+  });
+
+  backdrop.addEventListener('click', fullClose);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fullClose(); });
+})();
+</script>

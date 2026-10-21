@@ -1,0 +1,96 @@
+---
+layout: default
+---
+<section class="pagehead">
+  <div class="wrap">
+    <p class="back"><a href="{{ '/' | relative_url }}">‹ 回到首页</a></p>
+    <h1 class="title">{{ page.title }}</h1>
+    <p class="section-note">{{ page.note }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% assign items = site[page.collection] | sort: 'date' | reverse %}
+    {% if items.size > 0 %}
+    <ul class="index" id="pagedList">
+      {% for item in items %}
+      <li class="item">
+        <div class="item-head">
+          <a href="{{ item.url | relative_url }}"><h3 class="item-title">{{ item.title }}</h3></a>
+          <button class="fav-btn" data-url="{{ item.url }}" data-title="{{ item.title | escape }}" data-date="{{ item.date | date: '%Y-%m-%d' }}" data-excerpt="{{ item.excerpt | escape }}" aria-label="收藏 {{ item.title }}" title="收藏">&starf;</button>
+        </div>
+        <p class="item-meta">{{ item.date | date: "%Y 年 %m 月" }}</p>
+        {% if item.excerpt %}<p class="item-excerpt">{{ item.excerpt }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <nav class="pager" id="pagedNav" aria-label="分页"></nav>
+    {% else %}
+    <p class="section-note">还没有内容，先写一篇吧。</p>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+(function () {
+  const list = document.getElementById('pagedList');
+  const nav = document.getElementById('pagedNav');
+
+  // ----- 收藏（浏览器本地 localStorage） -----
+  const FAV_KEY = 'evergreen_favorites';
+  function getFavs() { try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch (e) { return []; } }
+  function saveFavs(arr) { localStorage.setItem(FAV_KEY, JSON.stringify(arr)); }
+  function isFav(url) { return getFavs().some(function (f) { return f.url === url; }); }
+  function bindFav() {
+    document.querySelectorAll('.fav-btn').forEach(function (btn) {
+      const url = btn.getAttribute('data-url');
+      const title = btn.getAttribute('data-title');
+      const date = btn.getAttribute('data-date');
+      const excerpt = btn.getAttribute('data-excerpt');
+      if (isFav(url)) btn.classList.add('active');
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        let favs = getFavs();
+        if (isFav(url)) { favs = favs.filter(function (f) { return f.url !== url; }); btn.classList.remove('active'); }
+        else { favs.push({ url: url, title: title, date: date, excerpt: excerpt }); btn.classList.add('active'); }
+        saveFavs(favs);
+      });
+    });
+  }
+  bindFav();
+
+  // ----- 分页 -----
+  if (!list) return;
+  const items = Array.prototype.slice.call(list.children).filter(el => el.classList.contains('item'));
+  const perPage = 8;
+  const total = items.length;
+  const pages = Math.max(1, Math.ceil(total / perPage));
+  let cur = 1;
+
+  function render() {
+    items.forEach(function (el, i) {
+      const p = Math.floor(i / perPage) + 1;
+      el.style.display = (p === cur) ? '' : 'none';
+    });
+    buildNav();
+  }
+  function buildNav() {
+    if (total <= perPage) { nav.innerHTML = ''; return; }
+    let h = '';
+    if (cur > 1) h += '<button class="pg" data-goto="' + (cur - 1) + '" aria-label="上一页">‹ 上一页</button>';
+    for (let p = 1; p <= pages; p++) {
+      h += '<button class="pg' + (p === cur ? ' active' : '') + '" data-goto="' + p + '"' + (p === cur ? ' aria-current="page"' : '') + '>' + p + '</button>';
+    }
+    if (cur < pages) h += '<button class="pg" data-goto="' + (cur + 1) + '" aria-label="下一页">下一页 ›</button>';
+    nav.innerHTML = h;
+  }
+  nav.addEventListener('click', function (e) {
+    const b = e.target.closest('[data-goto]');
+    if (!b) return;
+    cur = parseInt(b.getAttribute('data-goto'), 10);
+    render();
+  });
+  render();
+})();
+</script>

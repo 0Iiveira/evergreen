@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<section class="pagehead">
+  <div class="wrap">
+    {% if page.collection == 'plaza' %}
+    <p class="back"><a href="{{ '/about.html' | relative_url }}">‹ 回到广场</a></p>
+    {% elsif page.collection == 'reading' %}
+    <p class="back"><a href="{{ '/reading.html' | relative_url }}">‹ 回到藏经阁</a></p>
+    {% else %}
+    <p class="back"><a href="{{ '/essays.html' | relative_url }}">‹ 回到书斋</a></p>
+    {% endif %}
+    <h1 class="title">{{ page.title }}</h1>
+    <p class="section-note">{{ page.date | date: "%Y 年 %m 月" }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="article">
+      {{ content }}
+    </div>
+  </div>
+</section>

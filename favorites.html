@@ -1,0 +1,71 @@
+---
+layout: default
+title: 我的收藏
+nav: favorites
+---
+<section class="pagehead">
+  <div class="wrap">
+    <p class="back"><a href="{{ '/' | relative_url }}">‹ 回到首页</a></p>
+    <h1 class="title">我的收藏</h1>
+    <p class="section-note">收藏保存在你的浏览器里。换设备或清除数据后就没有了。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <ul class="index" id="favList"></ul>
+    <p class="section-note" id="favEmpty">还没有收藏。去书斋、藏经阁或广场，点文章标题旁的星标收藏吧。</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  const FAV_KEY = 'evergreen_favorites';
+  const list = document.getElementById('favList');
+  const empty = document.getElementById('favEmpty');
+  function getFavs() { try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch (e) { return []; } }
+
+  const favs = getFavs();
+  if (!favs.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+
+  function fmtDate(d) {
+    if (!d) return '';
+    const m = d.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) return m[1] + ' 年 ' + m[2] + ' 月';
+    return d;
+  }
+
+  favs.forEach(function (f) {
+    const li = document.createElement('li');
+    li.className = 'item';
+
+    const head = document.createElement('div');
+    head.className = 'item-head';
+    const a = document.createElement('a');
+    a.href = f.url;
+    const h = document.createElement('h3');
+    h.className = 'item-title';
+    h.textContent = f.title || '(无标题)';
+    a.appendChild(h);
+    head.appendChild(a);
+
+    const rem = document.createElement('button');
+    rem.className = 'fav-btn active';
+    rem.textContent = '取消收藏';
+    rem.addEventListener('click', function () {
+      const arr = getFavs().filter(function (x) { return x.url !== f.url; });
+      localStorage.setItem(FAV_KEY, JSON.stringify(arr));
+      li.remove();
+      if (!getFavs().length) empty.style.display = '';
+    });
+    head.appendChild(rem);
+    li.appendChild(head);
+
+    if (f.date) { const meta = document.createElement('p'); meta.className = 'item-meta'; meta.textContent = fmtDate(f.date); li.appendChild(meta); }
+    if (f.excerpt) { const ex = document.createElement('p'); ex.className = 'item-excerpt'; ex.textContent = f.excerpt; li.appendChild(ex); }
+
+    list.appendChild(li);
+  });
+})();
+</script>

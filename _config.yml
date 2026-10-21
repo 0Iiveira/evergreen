@@ -1,0 +1,51 @@
+# 小白的长青阁 · GitHub Pages(Jekyll)配置
+title: 小白的长青阁
+description: 读书，写字——把读过的与写下的留在这里。
+lang: zh-CN
+theme-color: "#2E5A45"
+
+# 部署到 GitHub Pages 子路径 /evergreen 必需：告诉 Jekyll 链接都加上这个前缀
+url: "https://0iveira.github.io"
+baseurl: "/evergreen"
+
+# 四个内容集合：书斋(essays) 藏经阁(reading) 广场(plaza) 密阁(changelog)
+collections:
+  essays:
+    output: true
+    permalink: /essays/:slug/
+  reading:
+    output: true
+    permalink: /reading/:slug/
+  plaza:
+    output: true
+    permalink: /plaza/:slug/
+  changelog:
+    output: true
+    permalink: /changelog/:slug/
+
+# 集合文章默认布局与分类
+defaults:
+  - scope:
+      path: ""
+      type: essays
+    values:
+      layout: post
+      category: 书斋
+  - scope:
+      path: ""
+      type: reading
+    values:
+      layout: post
+      category: 藏经阁
+  - scope:
+      path: ""
+      type: plaza
+    values:
+      layout: post
+      category: 广场
+  - scope:
+      path: ""
+      type: changelog
+    values:
+      layout: post
+      category: 密阁

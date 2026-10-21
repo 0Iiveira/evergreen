@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.description }}">
+  <meta name="theme-color" content="{{ site.theme-color }}">
+  <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap" style="display:flex;align-items:baseline;justify-content:space-between;width:100%">
+    <span class="brand"><a href="{{ '/' | relative_url }}" style="text-decoration:none">{{ site.title }}</a></span>
+    <nav class="nav" aria-label="页面导航">
+      <a href="{{ '/essays.html' | relative_url }}" {% if page.nav == 'essays' %}aria-current="page"{% endif %}>书斋</a>
+      <a href="{{ '/reading.html' | relative_url }}" {% if page.nav == 'reading' %}aria-current="page"{% endif %}>藏经阁</a>
+      <a href="{{ '/about.html' | relative_url }}" {% if page.nav == 'about' %}aria-current="page"{% endif %}>广场</a>
+      <a href="{{ '/changelog.html' | relative_url }}" {% if page.nav == 'changelog' %}aria-current="page"{% endif %}>密阁</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+{{ content }}
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span class="brand">{{ site.title }}</span>
+    <p class="line">记于二〇二六年</p>
+  </div>
+</footer>
+
+{% include sidebar.html %}
+</body>
+</html>

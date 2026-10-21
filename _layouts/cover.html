@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.description }}">
+  <meta name="theme-color" content="{{ site.theme-color }}">
+  <title>{{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+</head>
+<body>
+
+<!-- 大封面：点「进入」直接进书斋 -->
+<div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="{{ site.title }}">
+  <div class="seal cover-seal" aria-hidden="true"><span>长</span><span>青</span></div>
+  <div class="cover-inner">
+    <h1 class="cover-title">{{ site.title }}</h1>
+    <p class="cover-poem">君立青山长青木，叶栖云畔长情枝。</p>
+    <a class="enter" href="{{ '/essays.html' | relative_url }}" id="enter">进入</a>
+  </div>
+
+  <!-- 淡墨青山剪影，呼应诗句 -->
+  <svg class="cover-mountains" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="rgba(46,90,69,0.06)" d="M0,220 C220,170 420,250 640,200 C850,156 1060,240 1230,196 C1330,168 1400,190 1440,184 L1440,320 L0,320 Z"></path>
+    <path fill="rgba(46,90,69,0.11)" d="M0,266 C260,224 500,296 760,250 C980,212 1180,272 1440,242 L1440,320 L0,320 Z"></path>
+    <path fill="rgba(46,90,69,0.16)" d="M0,300 C320,276 620,312 900,288 C1140,266 1300,300 1440,286 L1440,320 L0,320 Z"></path>
+  </svg>
+</div>
+
+{% include sidebar.html %}
+
+</body>
+</html>
