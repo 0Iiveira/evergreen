@@ -39,6 +39,7 @@ a{color:inherit}
 .brand{
   font-size:1.1rem;letter-spacing:.03em;color:var(--ink-soft);
 }
+.mast-loc{font-size:.95rem;color:var(--ink-soft)}
 .nav{display:flex;gap:1.7rem;font-size:.95rem;flex-wrap:wrap}
 .nav a{
   text-decoration:none;color:var(--ink-soft);
@@ -102,6 +103,16 @@ a{color:inherit}
 .ch-title{margin:0;font-size:1.15rem;font-weight:600;line-height:1.4;color:var(--ink)}
 .ch-date{font-size:.85rem;color:var(--ink-soft);flex:0 0 auto}
 .ch-note{margin:.5rem 0 0;color:var(--ink-soft);font-size:.98rem;max-width:34rem}
+
+/* ---------- 翻页/瀑布流切换 ---------- */
+.view-toggle{display:inline-flex;gap:.4rem;margin:0 0 1.6rem}
+.vt-btn{
+  font-family:inherit;font-size:.9rem;color:var(--ink-soft);
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  padding:.35rem .85rem;cursor:pointer;transition:color .2s ease,border-color .2s ease,background .2s ease;
+}
+.vt-btn:hover{color:var(--evergreen);border-color:var(--evergreen)}
+.vt-btn.active{color:var(--paper-raise);background:var(--evergreen);border-color:var(--evergreen)}
 
 /* ---------- 分页 ---------- */
 .pager{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:2.4rem}
@@ -241,6 +252,11 @@ a{color:inherit}
 .sidebar-item:hover{background:var(--paper);color:var(--evergreen)}
 .sidebar-item .si-icon{display:flex;color:var(--evergreen);flex:0 0 auto}
 .sidebar-item .si-label{font-size:1rem;display:none}
+.sidebar-divider{
+  display:block;width:1.1rem;height:1px;background:var(--line);
+  margin:.35rem 0;flex:0 0 auto;
+}
+.sidebar.hover-open .sidebar-divider,.sidebar.full-open .sidebar-divider{width:100%}
 
 /* 悬停展开：整条变宽、显示文字 */
 .sidebar.hover-open,.sidebar.full-open{width:15.5rem;align-items:stretch;padding:1.4rem 1rem}
