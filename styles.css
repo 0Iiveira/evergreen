@@ -293,9 +293,9 @@ body.sidebar-hidden .sidebar{transform:translateX(-100%)}
   margin-top:auto;flex:0 0 auto;width:100%;height:2.6rem;
   display:flex;align-items:center;justify-content:center;padding:0;
   background:transparent;border:none;color:var(--ink-soft);
-  cursor:pointer;opacity:.3;transition:opacity .2s ease,color .2s ease;
+  cursor:pointer;opacity:.55;transition:opacity .2s ease,color .2s ease;
 }
-.sidebar-hide:hover{opacity:.85;color:var(--evergreen)}
+.sidebar-hide:hover{opacity:1;color:var(--evergreen)}
 .sidebar.hover-open .sidebar-hide,.sidebar.full-open .sidebar-hide{display:none}
 
 /* 隐藏后：鼠标移到页面最左边缘才出现的“展开”按钮（配色随主题） */
@@ -310,7 +310,7 @@ body.sidebar-hidden .sidebar{transform:translateX(-100%)}
 
 /* 展开侧边栏底部的淡墨远山（与主页封面同色调，贴底） */
 .sidebar-mountains{
-  position:absolute;left:0;right:0;bottom:0;width:100%;height:7rem;
+  position:absolute;left:0;right:0;bottom:0;width:100%;height:11rem;
   pointer-events:none;display:none;z-index:0;
 }
 .sidebar.hover-open .sidebar-mountains,.sidebar.full-open .sidebar-mountains{display:block}
@@ -327,4 +327,9 @@ body.sidebar-hidden .sidebar{transform:translateX(-100%)}
   body{padding-left:3rem}
   /* 移动端展开宽度略窄 */
   .sidebar.hover-open,.sidebar.full-open{width:13rem}
+  /* 触摸屏没有悬停：恢复按钮始终可见可点，宽度加大方便点击 */
+  .sidebar-reveal{opacity:.7;width:26px}
+  .sidebar-reveal:hover{opacity:1}
+  /* 触摸屏上隐藏按钮更明显，避免难点 */
+  .sidebar-hide{opacity:.7}
 }
