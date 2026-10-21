@@ -7,6 +7,8 @@ layout: default
     <p class="back"><a href="{{ '/about.html' | relative_url }}">‹ 回到广场</a></p>
     {% elsif page.collection == 'reading' %}
     <p class="back"><a href="{{ '/reading.html' | relative_url }}">‹ 回到藏经阁</a></p>
+    {% elsif page.collection == 'changelog' %}
+    <p class="back"><a href="{{ '/changelog.html' | relative_url }}">‹ 回到密阁</a></p>
     {% else %}
     <p class="back"><a href="{{ '/essays.html' | relative_url }}">‹ 回到书斋</a></p>
     {% endif %}
@@ -17,8 +19,68 @@ layout: default
 
 <section class="section">
   <div class="wrap">
-    <div class="article">
+    <div class="article" id="articleBody">
       {{ content }}
     </div>
+    <nav class="pager" id="articleNav" aria-label="正文分页"></nav>
   </div>
 </section>
+
+<script>
+(function () {
+  const body = document.getElementById('articleBody');
+  const nav = document.getElementById('articleNav');
+  if (!body) return;
+  const units = Array.prototype.slice.call(body.children).filter(function (el) {
+    return el.tagName === 'P' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'BLOCKQUOTE';
+  });
+  const perPage = 4;   // 每页正文块数
+  const total = units.length;
+  const pages = Math.max(1, Math.ceil(total / perPage));
+  let cur = 1;
+
+  const KEY = 'evergreen_article_view';
+  function getView() { try { return localStorage.getItem(KEY) || 'waterfall'; } catch (e) { return 'waterfall'; } }
+  function setView(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+  // 右上角切换按钮（由 default masthead 注入 .body-toggle）
+  const toggleBtns = document.querySelectorAll('[data-body-view]');
+
+  function apply() {
+    const view = getView();
+    toggleBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.bodyView === view); b.setAttribute('aria-pressed', b.dataset.bodyView === view ? 'true' : 'false'); });
+    if (view === 'waterfall') {
+      units.forEach(function (el) { el.style.display = ''; });
+      nav.innerHTML = ''; nav.style.display = 'none';
+    } else {
+      units.forEach(function (el, i) {
+        const p = Math.floor(i / perPage) + 1;
+        el.style.display = (p === cur) ? '' : 'none';
+      });
+      nav.style.display = '';
+      buildNav();
+    }
+  }
+  function buildNav() {
+    if (pages <= 1) { nav.innerHTML = ''; return; }
+    let h = '';
+    if (cur > 1) h += '<button class="pg" data-goto="' + (cur - 1) + '" aria-label="上一页">‹ 上一页</button>';
+    for (let p = 1; p <= pages; p++) {
+      h += '<button class="pg' + (p === cur ? ' active' : '') + '" data-goto="' + p + '"' + (p === cur ? ' aria-current="page"' : '') + '>' + p + '</button>';
+    }
+    if (cur < pages) h += '<button class="pg" data-goto="' + (cur + 1) + '" aria-label="下一页">下一页 ›</button>';
+    nav.innerHTML = h;
+  }
+  nav.addEventListener('click', function (e) {
+    if (getView() !== 'paged') return;
+    const b = e.target.closest('[data-goto]');
+    if (!b) return;
+    cur = parseInt(b.getAttribute('data-goto'), 10);
+    apply();
+  });
+  toggleBtns.forEach(function (b) {
+    b.addEventListener('click', function () { setView(b.dataset.bodyView); cur = 1; apply(); });
+  });
+  apply();
+})();
+</script>

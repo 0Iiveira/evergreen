@@ -13,10 +13,6 @@ layout: default
   <div class="wrap">
     {% assign items = site[page.collection] | sort: 'date' | reverse %}
     {% if items.size > 0 %}
-    <div class="view-toggle" role="group" aria-label="浏览方式">
-      <button class="vt-btn" data-view="paged" type="button">翻页</button>
-      <button class="vt-btn" data-view="waterfall" type="button">瀑布流</button>
-    </div>
     <ul class="index" id="pagedList">
       {% for item in items %}
       <li class="item">
@@ -64,6 +60,7 @@ layout: default
   }
   bindFav();
 
+  // ----- 分页（列表页默认翻页） -----
   if (!list) return;
   const items = Array.prototype.slice.call(list.children).filter(el => el.classList.contains('item'));
   const perPage = 8;
@@ -71,34 +68,15 @@ layout: default
   const pages = Math.max(1, Math.ceil(total / perPage));
   let cur = 1;
 
-  // ----- 翻页 / 瀑布流（localStorage 记忆） -----
-  const VIEW_KEY = 'evergreen_view_' + location.pathname;
-  const toggleBtns = document.querySelectorAll('.vt-btn');
-
-  function getView() { try { return localStorage.getItem(VIEW_KEY) || 'paged'; } catch (e) { return 'paged'; } }
-  function setView(v) { try { localStorage.setItem(VIEW_KEY, v); } catch (e) {} }
-
-  function setActiveBtn(view) {
-    toggleBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.view === view); });
-  }
   function render() {
-    const view = getView();
-    setActiveBtn(view);
-    if (view === 'waterfall') {
-      items.forEach(function (el) { el.style.display = ''; });
-      nav.innerHTML = '';
-      nav.style.display = 'none';
-    } else {
-      items.forEach(function (el, i) {
-        const p = Math.floor(i / perPage) + 1;
-        el.style.display = (p === cur) ? '' : 'none';
-      });
-      nav.style.display = '';
-      buildNav();
-    }
+    items.forEach(function (el, i) {
+      const p = Math.floor(i / perPage) + 1;
+      el.style.display = (p === cur) ? '' : 'none';
+    });
+    buildNav();
   }
   function buildNav() {
-    if (total <= perPage) { nav.innerHTML = ''; nav.style.display = 'none'; return; }
+    if (total <= perPage) { nav.innerHTML = ''; return; }
     let h = '';
     if (cur > 1) h += '<button class="pg" data-goto="' + (cur - 1) + '" aria-label="上一页">‹ 上一页</button>';
     for (let p = 1; p <= pages; p++) {
@@ -108,14 +86,10 @@ layout: default
     nav.innerHTML = h;
   }
   nav.addEventListener('click', function (e) {
-    if (getView() === 'waterfall') return;
     const b = e.target.closest('[data-goto]');
     if (!b) return;
     cur = parseInt(b.getAttribute('data-goto'), 10);
     render();
-  });
-  toggleBtns.forEach(function (b) {
-    b.addEventListener('click', function () { setView(b.dataset.view); render(); });
   });
   render();
 })();
