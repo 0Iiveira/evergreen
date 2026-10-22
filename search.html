@@ -22,16 +22,16 @@ nav: search
 <!-- 搜索数据：Jekyll 把全部文章渲染到这里，前端过滤 -->
 <ul id="searchData" hidden>
   {% for item in site.essays %}
-  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="书斋"></li>
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-ts="{{ item.date | date: '%s' }}" data-url="{{ item.url | relative_url }}" data-section="书斋"></li>
   {% endfor %}
   {% for item in site.reading %}
-  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="藏经阁"></li>
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-ts="{{ item.date | date: '%s' }}" data-url="{{ item.url | relative_url }}" data-section="藏经阁"></li>
   {% endfor %}
   {% for item in site.plaza %}
-  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="广场"></li>
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-ts="{{ item.date | date: '%s' }}" data-url="{{ item.url | relative_url }}" data-section="广场"></li>
   {% endfor %}
   {% for item in site.forbidden %}
-  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="禁地"></li>
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-ts="{{ item.date | date: '%s' }}" data-url="{{ item.url | relative_url }}" data-section="禁地"></li>
   {% endfor %}
 </ul>
 
@@ -41,6 +41,7 @@ nav: search
     return {
       title: li.getAttribute('data-title') || '',
       excerpt: li.getAttribute('data-excerpt') || '',
+      ts: parseInt(li.getAttribute('data-ts'), 10) || 0,
       url: li.getAttribute('data-url') || '',
       section: li.getAttribute('data-section') || ''
     };
@@ -61,6 +62,8 @@ nav: search
     if (!q) { results.innerHTML = ''; hint.textContent = '输入关键词开始搜索。'; return; }
     var hits = data.filter(function (d) {
       return d.title.toLowerCase().indexOf(q) !== -1;
+    }).sort(function (a, b) {
+      return b.ts - a.ts;
     });
     hint.textContent = hits.length ? ('找到 ' + hits.length + ' 条结果') : '没有找到相关内容。';
     results.innerHTML = hits.map(function (d) {
