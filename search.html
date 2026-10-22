@@ -33,6 +33,9 @@ nav: search
   {% for item in site.changelog %}
   <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.content | strip_html | truncate: 60 | escape }}" data-url="{{ '/changelog.html' | relative_url }}" data-section="密阁"></li>
   {% endfor %}
+  {% for item in site.forbidden %}
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="禁地"></li>
+  {% endfor %}
 </ul>
 
 <script>
@@ -60,7 +63,7 @@ nav: search
     var q = input.value.trim().toLowerCase();
     if (!q) { results.innerHTML = ''; hint.textContent = '输入关键词开始搜索。'; return; }
     var hits = data.filter(function (d) {
-      return (d.title + ' ' + d.excerpt).toLowerCase().indexOf(q) !== -1;
+      return d.title.toLowerCase().indexOf(q) !== -1;
     });
     hint.textContent = hits.length ? ('找到 ' + hits.length + ' 条结果') : '没有找到相关内容。';
     results.innerHTML = hits.map(function (d) {

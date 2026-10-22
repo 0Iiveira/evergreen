@@ -1,7 +1,5 @@
 # 本机预览与临时文件——不推送到 GitHub
 _preview/
-_README-如何写文章.md
-_TEMPLATE.md
 serve.mjs
 _preview-build.mjs
 _check.mjs

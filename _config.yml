@@ -8,7 +8,7 @@ theme-color: "#2E5A45"
 url: "https://0iveira.github.io"
 baseurl: "/evergreen"
 
-# 四个内容集合：书斋(essays) 藏经阁(reading) 广场(plaza) 密阁(changelog)
+# 五个内容集合：书斋(essays) 藏经阁(reading) 广场(plaza) 密阁(changelog) 禁地(forbidden)
 collections:
   essays:
     output: true
@@ -22,6 +22,9 @@ collections:
   changelog:
     output: true
     permalink: /changelog/:slug/
+  forbidden:
+    output: true
+    permalink: /forbidden/:slug/
 
 # 集合文章默认布局与分类
 defaults:
@@ -49,3 +52,9 @@ defaults:
     values:
       layout: post
       category: 密阁
+  - scope:
+      path: ""
+      type: forbidden
+    values:
+      layout: post
+      category: 禁地
