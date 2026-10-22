@@ -51,7 +51,8 @@ nav: favorites
     const head = document.createElement('div');
     head.className = 'item-head';
     const a = document.createElement('a');
-    a.href = fixUrl(f.url);
+    var u = fixUrl(f.url);
+    a.href = u + (u.indexOf('?') > -1 ? '&' : '?') + 'from=favorites';
     const h = document.createElement('h3');
     h.className = 'item-title';
     h.textContent = f.title || '(无标题)';

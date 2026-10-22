@@ -165,3 +165,19 @@ layout: default
   if (saved) setReading(true);
 })();
 </script>
+
+<script>
+// 来源感知：从“我的收藏”点进来的，返回链接改为回到收藏
+(function () {
+  try {
+    var params = new URLSearchParams(location.search);
+    if (params.get('from') === 'favorites') {
+      var back = document.querySelector('.pagehead .back a');
+      if (back) {
+        back.setAttribute('href', '{{ "/favorites.html" | relative_url }}');
+        back.textContent = '‹ 回到我的收藏';
+      }
+    }
+  } catch (e) {}
+})();
+</script>
