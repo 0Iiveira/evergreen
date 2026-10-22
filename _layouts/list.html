@@ -18,7 +18,7 @@ layout: default
       <li class="item">
         <div class="item-head">
           <a href="{{ item.url | relative_url }}"><h3 class="item-title">{{ item.title }}</h3></a>
-          <button class="fav-btn" data-url="{{ item.url }}" data-title="{{ item.title | escape }}" data-date="{{ item.date | date: '%Y-%m-%d' }}" data-excerpt="{{ item.excerpt | escape }}" aria-label="收藏 {{ item.title }}" title="收藏">&starf;</button>
+          <button class="fav-btn" data-url="{{ item.url | relative_url }}" data-title="{{ item.title | escape }}" data-date="{{ item.date | date: '%Y-%m-%d' }}" data-excerpt="{{ item.excerpt | escape }}" aria-label="收藏 {{ item.title }}" title="收藏">&starf;</button>
         </div>
         <p class="item-meta">{{ item.date | date: "%Y 年 %m 月" }}</p>
         {% if item.excerpt %}<p class="item-excerpt">{{ item.excerpt }}</p>{% endif %}

@@ -29,6 +29,14 @@ nav: favorites
   if (!favs.length) { empty.style.display = ''; return; }
   empty.style.display = 'none';
 
+  // 兼容旧收藏里缺少 baseurl 前缀的链接
+  var BASE = '{{ site.baseurl }}';
+  function fixUrl(u) {
+    if (!u) return u;
+    if (BASE && u.indexOf(BASE) !== 0) return BASE + (u.charAt(0) === '/' ? u : '/' + u);
+    return u;
+  }
+
   function fmtDate(d) {
     if (!d) return '';
     const m = d.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -43,7 +51,7 @@ nav: favorites
     const head = document.createElement('div');
     head.className = 'item-head';
     const a = document.createElement('a');
-    a.href = f.url;
+    a.href = fixUrl(f.url);
     const h = document.createElement('h3');
     h.className = 'item-title';
     h.textContent = f.title || '(无标题)';
