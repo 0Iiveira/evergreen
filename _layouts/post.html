@@ -9,6 +9,8 @@ layout: default
     <p class="back"><a href="{{ '/reading.html' | relative_url }}">‹ 回到藏经阁</a></p>
     {% elsif page.collection == 'changelog' %}
     <p class="back"><a href="{{ '/changelog.html' | relative_url }}">‹ 回到密阁</a></p>
+    {% elsif page.collection == 'forbidden' %}
+    <p class="back"><a href="{{ '/forbidden.html' | relative_url }}">‹ 回到禁地</a></p>
     {% else %}
     <p class="back"><a href="{{ '/essays.html' | relative_url }}">‹ 回到书斋</a></p>
     {% endif %}
