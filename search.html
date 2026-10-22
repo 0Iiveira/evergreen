@@ -1,0 +1,77 @@
+---
+layout: default
+title: 搜索
+nav: search
+---
+<section class="pagehead">
+  <div class="wrap">
+    <p class="back"><a href="{{ '/' | relative_url }}">‹ 回到首页</a></p>
+    <h1 class="title">搜索</h1>
+    <p class="section-note">在书斋、藏经阁、广场、密阁里查找。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <input type="search" id="searchInput" class="search-input" placeholder="输入关键词…" autocomplete="off" aria-label="搜索关键词">
+    <p class="section-note" id="searchHint">输入关键词开始搜索。</p>
+    <ul class="index" id="searchResults"></ul>
+  </div>
+</section>
+
+<!-- 搜索数据：Jekyll 把全部文章渲染到这里，前端过滤 -->
+<ul id="searchData" hidden>
+  {% for item in site.essays %}
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="书斋"></li>
+  {% endfor %}
+  {% for item in site.reading %}
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="藏经阁"></li>
+  {% endfor %}
+  {% for item in site.plaza %}
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.excerpt | escape }}" data-url="{{ item.url | relative_url }}" data-section="广场"></li>
+  {% endfor %}
+  {% for item in site.changelog %}
+  <li data-title="{{ item.title | escape }}" data-excerpt="{{ item.content | strip_html | truncate: 60 | escape }}" data-url="{{ '/changelog.html' | relative_url }}" data-section="密阁"></li>
+  {% endfor %}
+</ul>
+
+<script>
+(function () {
+  var data = Array.prototype.slice.call(document.querySelectorAll('#searchData li')).map(function (li) {
+    return {
+      title: li.getAttribute('data-title') || '',
+      excerpt: li.getAttribute('data-excerpt') || '',
+      url: li.getAttribute('data-url') || '',
+      section: li.getAttribute('data-section') || ''
+    };
+  });
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+  var hint = document.getElementById('searchHint');
+  if (!input) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function render() {
+    var q = input.value.trim().toLowerCase();
+    if (!q) { results.innerHTML = ''; hint.textContent = '输入关键词开始搜索。'; return; }
+    var hits = data.filter(function (d) {
+      return (d.title + ' ' + d.excerpt).toLowerCase().indexOf(q) !== -1;
+    });
+    hint.textContent = hits.length ? ('找到 ' + hits.length + ' 条结果') : '没有找到相关内容。';
+    results.innerHTML = hits.map(function (d) {
+      return '<li class="item">' +
+        '<div class="item-head"><a href="' + esc(d.url) + '"><h3 class="item-title">' + esc(d.title) + '</h3></a></div>' +
+        '<p class="item-meta">' + esc(d.section) + '</p>' +
+        (d.excerpt ? '<p class="item-excerpt">' + esc(d.excerpt) + '</p>' : '') +
+        '</li>';
+    }).join('');
+  }
+
+  input.addEventListener('input', render);
+})();
+</script>

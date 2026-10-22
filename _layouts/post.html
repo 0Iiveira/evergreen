@@ -26,6 +26,13 @@ layout: default
   </div>
 </section>
 
+<!-- 阅读模式浮动工具栏（阅读模式下显示） -->
+<div class="reading-toolbar" id="readingToolbar" hidden>
+  <button type="button" id="fontSmall" aria-label="减小字号">A－</button>
+  <button type="button" id="fontLarge" aria-label="增大字号">A＋</button>
+  <button type="button" id="readingExit">退出阅读</button>
+</div>
+
 <script>
 (function () {
   const body = document.getElementById('articleBody');
@@ -34,7 +41,7 @@ layout: default
   const units = Array.prototype.slice.call(body.children).filter(function (el) {
     return el.tagName === 'P' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'BLOCKQUOTE';
   });
-  const perPage = 4;   // 每页正文块数
+  const perPage = 10;  // 每页正文块数（调大，一页内容更多）
   const total = units.length;
   const pages = Math.max(1, Math.ceil(total / perPage));
   let cur = 1;
@@ -82,5 +89,47 @@ layout: default
     b.addEventListener('click', function () { setView(b.dataset.bodyView); cur = 1; apply(); });
   });
   apply();
+})();
+</script>
+
+<script>
+// 阅读模式：隐藏顶栏/页脚/侧边栏，正文居中，可调字号，偏好记住
+(function () {
+  const btn = document.getElementById('readingToggle');   // 顶栏按钮（default 注入）
+  const toolbar = document.getElementById('readingToolbar');
+  const fontSmall = document.getElementById('fontSmall');
+  const fontLarge = document.getElementById('fontLarge');
+  const exitBtn = document.getElementById('readingExit');
+  if (!toolbar) return;
+
+  const READ_KEY = 'evergreen_reading';
+  const SIZE_KEY = 'evergreen_reading_size';
+  let size = 1;
+  try { size = parseFloat(localStorage.getItem(SIZE_KEY) || '1') || 1; } catch (e) {}
+
+  function applySize() {
+    document.documentElement.style.setProperty('--reading-size', size + 'rem');
+    try { localStorage.setItem(SIZE_KEY, String(size)); } catch (e) {}
+  }
+  function isReading() { return document.body.classList.contains('reading-mode'); }
+  function setReading(on) {
+    document.body.classList.toggle('reading-mode', on);
+    toolbar.hidden = !on;
+    try { localStorage.setItem(READ_KEY, on ? '1' : '0'); } catch (e) {}
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) applySize();
+  }
+
+  applySize();
+  if (btn) btn.addEventListener('click', function () { setReading(!isReading()); });
+  if (fontSmall) fontSmall.addEventListener('click', function () { size = Math.max(0.85, Math.round((size - 0.1) * 100) / 100); applySize(); });
+  if (fontLarge) fontLarge.addEventListener('click', function () { size = Math.min(1.35, Math.round((size + 0.1) * 100) / 100); applySize(); });
+  if (exitBtn) exitBtn.addEventListener('click', function () { setReading(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isReading()) setReading(false); });
+
+  // 恢复上次的阅读模式偏好
+  let saved = false;
+  try { saved = localStorage.getItem(READ_KEY) === '1'; } catch (e) {}
+  if (saved) setReading(true);
 })();
 </script>

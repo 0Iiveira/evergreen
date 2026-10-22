@@ -333,3 +333,45 @@ body.sidebar-hidden .sidebar{transform:translateX(-100%)}
   /* 触摸屏上隐藏按钮更明显，避免难点 */
   .sidebar-hide{opacity:.7}
 }
+
+/* ---------- 顶栏小按钮：搜索 / 阅读模式 ---------- */
+.mast-search,.reading-toggle{
+  width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--line);border-radius:50%;
+  color:var(--ink-soft);cursor:pointer;padding:0;text-decoration:none;
+  transition:color .2s ease,border-color .2s ease;
+}
+.mast-search:hover,.reading-toggle:hover{color:var(--evergreen);border-color:var(--evergreen)}
+.reading-toggle[aria-pressed="true"]{color:var(--evergreen);border-color:var(--evergreen)}
+
+/* ---------- 阅读模式 ---------- */
+body.reading-mode{padding-left:0}
+body.reading-mode .sidebar{transform:translateX(-100%)}
+body.reading-mode .masthead,body.reading-mode .footer{display:none}
+body.reading-mode .pagehead{padding-top:2.4rem}
+body.reading-mode .article{max-width:40rem;margin-left:auto;margin-right:auto;font-size:var(--reading-size,1rem)}
+body.reading-mode .article p,body.reading-mode .article blockquote{line-height:2}
+body.reading-mode .article h2,body.reading-mode .article h3{margin-top:2rem}
+.reading-toolbar{
+  position:fixed;top:1.2rem;right:1.2rem;z-index:50;
+  display:flex;align-items:center;gap:.4rem;
+  background:var(--paper-raise);border:1px solid var(--line);border-radius:4px;
+  padding:.35rem .45rem;box-shadow:0 2px 12px rgba(0,0,0,.12);
+}
+.reading-toolbar[hidden]{display:none}
+.reading-toolbar button{
+  font-family:inherit;font-size:.85rem;color:var(--ink-soft);
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  padding:.25rem .5rem;cursor:pointer;transition:color .2s ease,border-color .2s ease;
+}
+.reading-toolbar button:hover{color:var(--evergreen);border-color:var(--evergreen)}
+
+/* ---------- 搜索页 ---------- */
+.search-input{
+  width:100%;max-width:36rem;font-family:inherit;font-size:1.05rem;
+  padding:.6rem .8rem;color:var(--ink);background:var(--paper-raise);
+  border:1px solid var(--line);border-radius:3px;outline:none;
+  transition:border-color .2s ease;
+}
+.search-input:focus{border-color:var(--evergreen)}
+#searchData{display:none}
