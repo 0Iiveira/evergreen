@@ -28,9 +28,12 @@ layout: default
 
 <!-- 阅读模式浮动工具栏（阅读模式下显示） -->
 <div class="reading-toolbar" id="readingToolbar" hidden>
+  <button type="button" data-body-view="waterfall">瀑布流</button>
+  <button type="button" data-body-view="paged">翻页</button>
+  <span class="rt-sep" aria-hidden="true"></span>
   <button type="button" id="fontSmall" aria-label="减小字号">A－</button>
   <button type="button" id="fontLarge" aria-label="增大字号">A＋</button>
-  <button type="button" id="readingExit">退出阅读</button>
+  <button type="button" id="readingExit">退出</button>
 </div>
 
 <script>

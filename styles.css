@@ -375,3 +375,8 @@ body.reading-mode .article h2,body.reading-mode .article h3{margin-top:2rem}
 }
 .search-input:focus{border-color:var(--evergreen)}
 #searchData{display:none}
+
+/* ---------- 阅读模式工具栏的视图切换 ---------- */
+.reading-toolbar{flex-wrap:wrap;max-width:min(92vw,22rem)}
+.rt-sep{width:1px;height:1.1rem;background:var(--line);margin:0 .15rem;flex:0 0 auto}
+.reading-toolbar [data-body-view].active{color:var(--paper-raise);background:var(--evergreen);border-color:var(--evergreen)}

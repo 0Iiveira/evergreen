@@ -72,19 +72,28 @@
     sidebar.classList.contains('full-open') ? fullClose() : fullOpen();
   });
 
-  // 隐藏侧边栏
-  hideBtn.addEventListener('click', function () {
-    sidebar.classList.remove('full-open', 'hover-open');
-    collapse();
-    document.body.classList.add('sidebar-hidden');
-    backdrop.hidden = true;
-    revealBtn.hidden = false;
-  });
-  // 恢复
-  revealBtn.addEventListener('click', function () {
-    document.body.classList.remove('sidebar-hidden');
-    revealBtn.hidden = true;
-  });
+  // 隐藏状态持久化（跨页面记住）
+  const HIDDEN_KEY = 'evergreen_sidebar_hidden';
+  function setHidden(on) {
+    document.body.classList.toggle('sidebar-hidden', on);
+    if (on) {
+      sidebar.classList.remove('full-open', 'hover-open');
+      backdrop.hidden = true;
+      revealBtn.hidden = false;
+    } else {
+      revealBtn.hidden = true;
+    }
+    try { localStorage.setItem(HIDDEN_KEY, on ? '1' : '0'); } catch (e) {}
+  }
+
+  // 隐藏 / 恢复
+  hideBtn.addEventListener('click', function () { setHidden(true); });
+  revealBtn.addEventListener('click', function () { setHidden(false); });
+
+  // 页面加载时恢复上次的隐藏状态（这样从书斋点进文章不会再冒出来）
+  let savedHidden = false;
+  try { savedHidden = localStorage.getItem(HIDDEN_KEY) === '1'; } catch (e) {}
+  if (savedHidden) setHidden(true);
 
   backdrop.addEventListener('click', fullClose);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fullClose(); });
