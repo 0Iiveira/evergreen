@@ -380,3 +380,15 @@ body.reading-mode .article h2,body.reading-mode .article h3{margin-top:2rem}
 .reading-toolbar{flex-wrap:wrap;max-width:min(92vw,22rem)}
 .rt-sep{width:1px;height:1.1rem;background:var(--line);margin:0 .15rem;flex:0 0 auto}
 .reading-toolbar [data-body-view].active{color:var(--paper-raise);background:var(--evergreen);border-color:var(--evergreen)}
+
+/* 工具栏收起后的展开按钮 */
+.toolbar-reveal{
+  position:fixed;top:1.2rem;right:1.2rem;z-index:50;
+  width:2.2rem;height:2.2rem;border-radius:50%;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--paper-raise);border:1px solid var(--line);color:var(--ink-soft);
+  cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);opacity:.6;
+  transition:opacity .2s ease,color .2s ease;
+}
+.toolbar-reveal:hover{opacity:1;color:var(--evergreen)}
+.toolbar-reveal[hidden]{display:none}

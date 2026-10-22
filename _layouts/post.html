@@ -33,8 +33,14 @@ layout: default
   <span class="rt-sep" aria-hidden="true"></span>
   <button type="button" id="fontSmall" aria-label="减小字号">A－</button>
   <button type="button" id="fontLarge" aria-label="增大字号">A＋</button>
+  <button type="button" id="themeInline" aria-label="日夜切换" title="日夜切换">夜</button>
   <button type="button" id="readingExit">退出</button>
+  <button type="button" id="toolbarCollapse" aria-label="收起工具栏" title="收起工具栏">×</button>
 </div>
+<!-- 工具栏收起后的展开按钮 -->
+<button type="button" class="toolbar-reveal" id="toolbarReveal" aria-label="展开工具栏" title="展开工具栏" hidden>
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h10M4 12h16M4 17h13"/></svg>
+</button>
 
 <script>
 (function () {
@@ -103,6 +109,9 @@ layout: default
   const fontSmall = document.getElementById('fontSmall');
   const fontLarge = document.getElementById('fontLarge');
   const exitBtn = document.getElementById('readingExit');
+  const themeBtn = document.getElementById('themeInline');
+  const collapseBtn = document.getElementById('toolbarCollapse');
+  const toolbarReveal = document.getElementById('toolbarReveal');
   if (!toolbar) return;
 
   const READ_KEY = 'evergreen_reading';
@@ -118,6 +127,7 @@ layout: default
   function setReading(on) {
     document.body.classList.toggle('reading-mode', on);
     toolbar.hidden = !on;
+    if (toolbarReveal) toolbarReveal.hidden = true;
     try { localStorage.setItem(READ_KEY, on ? '1' : '0'); } catch (e) {}
     if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     if (on) applySize();
@@ -129,6 +139,23 @@ layout: default
   if (fontLarge) fontLarge.addEventListener('click', function () { size = Math.min(1.35, Math.round((size + 0.1) * 100) / 100); applySize(); });
   if (exitBtn) exitBtn.addEventListener('click', function () { setReading(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isReading()) setReading(false); });
+
+  // 工具栏内置日夜切换
+  function syncThemeLabel() { if (themeBtn) themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '日' : '夜'; }
+  if (themeBtn) {
+    syncThemeLabel();
+    themeBtn.addEventListener('click', function () {
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (dark) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', 'dark');
+      try { localStorage.setItem('evergreen_theme', dark ? 'light' : 'dark'); } catch (e) {}
+      syncThemeLabel();
+    });
+  }
+
+  // 工具栏收起 / 展开
+  if (collapseBtn) collapseBtn.addEventListener('click', function () { toolbar.hidden = true; if (toolbarReveal) toolbarReveal.hidden = false; });
+  if (toolbarReveal) toolbarReveal.addEventListener('click', function () { toolbar.hidden = false; toolbarReveal.hidden = true; });
 
   // 恢复上次的阅读模式偏好
   let saved = false;
